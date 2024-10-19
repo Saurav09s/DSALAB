@@ -1,51 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *Stack,SIZE,top=-1;
+struct Stack{
+    int *stack;
+    int top;
+    int SIZE;
+}A;
 
-void PUSH(int n);
+void PUSH(int x);
 int POP();
-void isEmpty();
 void isFull();
+void isEmpty();
 void Traverse();
 
 int main()
 {
+    A.top=-1;
     printf("Enter the size of the stack: ");
-    scanf("%d",&SIZE);
-    Stack=(int*)calloc(SIZE,sizeof(int));
-    while(1)
+    scanf("%d",&A.SIZE);
+    A.stack=(int *)malloc(A.SIZE*sizeof(int));
+    while (1)
     {
         int choice;
-        printf("\n*******MENU*******\n");
-        printf("1.PUSH");
-        printf("2.POP");
-        printf("3.isEmpty");
-        printf("4.isFull");
-        printf("5.Traverse");
-        printf("6.EXIT");
-        printf("Enter your choice:");
+        printf("Main Menu\n");
+        printf("1. PUSH\n");
+        printf("2. POP\n");
+        printf("3. isFull\n");
+        printf("4. isEmpty\n");
+        printf("5. Traverse\n");
+        printf("6. Exit\n");
+        printf("\n");
+        printf("Enter your choice: ");
         scanf("%d",&choice);
         switch (choice)
         {
             case 1:
-                printf("Enter the element to be inserted: ");
-                int n;
-                scanf("%d",&n);
-                PUSH(n);
-                printf("Element successfully inserted!\n");
+                printf("Enter the value to be pushed into the stack: ");
+                int x;
+                scanf("%d",&x);
+                PUSH(x);
                 break;
-
+            
             case 2:
-                printf("%d deleted successfully!\n",POP());
+                printf("The deleted value is : %d \n",POP());
                 break;
 
             case 3:
-                isEmpty();
+                isFull();
                 break;
 
             case 4:
-                isFull();
+                isEmpty();
                 break;
 
             case 5:
@@ -53,82 +58,70 @@ int main()
                 break;
 
             case 6:
-                free(Stack);
+                free(A.stack);
                 exit(0);
-                break;
-
+            
             default:
-                printf("Wrong Choice");
+                printf("Wrong Choice!\n");
                 break;
         }
     }
-
-    return 0;
+    return 0;    
 }
-
-void PUSH(int n)
+void PUSH(int x)
 {
-    if(top==SIZE-1)
+    if(A.top==A.SIZE-1)
     {
-        printf("Stack is full!\n");
+        printf("Stack is Full\n");
     }
     else
     {
-        top++;
-        Stack[top]=n;
+        A.top++;
+        A.stack[A.top]=x;
+        printf("Element successfully pushed\n");
     }
 }
-
 int POP()
 {
-    if(top==-1)
+    if(A.top==-1)
     {
-        printf("Stack Underflow!\n");
+        printf("Stack is empty!\n");
     }
     else
     {
-        return Stack[top];
-        top--;
+        int temp;
+        temp = A.stack[A.top];
+        A.top--;
+        return temp;
     }
 }
-
-void isEmpty()
-{
-    if(top==-1)
-    {
-        printf("Stack is empty!");
-    }
-    else
-    {
-        printf("Stack not empty!");
-    }
-}
-
 void isFull()
 {
-    if(top==SIZE-1)
+    if(A.top==A.SIZE-1)
     {
-        printf("Stack is full!\n");
+        printf("Stack is full\n");
     }
-    else 
+    else
     {
         printf("Stack is not full\n");
     }
 }
-
-void Traverse()
+void isEmpty()
 {
-    if(top==-1)
+    if(A.top==-1)
     {
-        printf("Stack is Empty\n");
+        printf("Stack is empty!\n");
     }
     else
     {
-        printf("The elements in stack are: ");
-        for(int i=top;i>=0;i--)
-        {
-            printf("%d ",Stack[i]);
-        }
-        printf("\n");
+        printf("Stack is not empty.\n");
     }
+}
+void Traverse()
+{
+    for(int i = A.top;i>=0;i--)
+    {
+        printf("%d ",A.stack[i]);
+    }
+    printf("\n");
 }
