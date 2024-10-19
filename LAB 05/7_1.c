@@ -1,42 +1,55 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 
-int *LQueue=NULL,SIZE,front = -1,rear = -1;
+struct LinearQueue{
+    int *LQueue;
+    int front;
+    int rear;
+    int SIZE;
+}LQ;
 
-void Enqueue();
+void create();
+void Enqueue(int x);
 int Dequeue();
-void isEmpty();
 void isFull();
+void isEmpty();
 void Traverse();
 
 int main()
 {
-    printf("Enter the size:");
-    scanf("%d",&SIZE);
-    LQueue = (int*)malloc(SIZE*sizeof(int));
-    int choice;
-    while(1)
+    create();
+    while (1)
     {
-        printf("Enter your choice:");
+        int choice;
+        printf("Main Menu\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. isFull\n");
+        printf("4. isEmpty\n");
+        printf("5. Traverse\n");
+        printf("6. Exit\n\n");
+        printf("Enter your choice: ");
         scanf("%d",&choice);
+
         switch (choice)
         {
             case 1:
-                Enqueue();
+                printf("Enter the element to be enqueued: ");
+                int x;
+                scanf("%d",&x);
+                Enqueue(x);
                 break;
 
             case 2:
-                printf("Element %d deleted successfully",Dequeue());
-                printf("\n");
+                printf("The element deleted was: %d\n",Dequeue());
                 break;
 
             case 3:
-                isEmpty();
+                isFull();
                 break;
 
             case 4:
-                isFull();
+                isEmpty();
                 break;
 
             case 5:
@@ -44,85 +57,94 @@ int main()
                 break;
 
             case 6:
-                free(LQueue);
+                free(LQ.LQueue);
                 exit(0);
-                break;
 
             default:
-                printf("Wrong Choice");
+                printf("Wrong Choice!\n");
                 break;
-        }
+        }       
     }
+    return 0;    
+} 
 
-    return 0;
-}
-
-void Enqueue()
+void create()
 {
-    if(rear==SIZE-1)
+    printf("Enter the size of the Queue: ");
+    scanf("%d",&LQ.SIZE);
+    LQ.LQueue = (int *)malloc(LQ.SIZE*sizeof(int));
+    LQ.front=0;
+    LQ.rear=-1;
+}
+void Enqueue(int x)
+{
+    if(LQ.rear==LQ.SIZE-1)
     {
-        printf("Queue is full\n");
+        printf("Queue is full!\n");
     }
     else
     {
-        int x;
-        printf("Enter the element to be inserted: ");
-        scanf("%d",&x);
-        front=0;
-        LQueue[++rear]=x;
-        printf("Element successfully inserted \n");
+        LQ.rear++;
+        LQ.LQueue[LQ.rear]=x;
     }
 }
 
 int Dequeue()
 {
-    int temp;
-    if(front==rear==-1||front>rear)
+    if(LQ.rear==LQ.front==-1||LQ.front>LQ.rear)
     {
-        printf("Queue is empty \n");
+        printf("Queue is empty!\n");
     }
-    else if(front==rear)
+    else if(LQ.rear==LQ.front&&LQ.rear!=-1)
     {
-        temp=LQueue[front];
-        front=rear=-1;
+        int temp = LQ.LQueue[LQ.front];
+        LQ.front++;
         return temp;
     }
     else
     {
-        temp=LQueue[front];
-        front++;
+        int temp = LQ.LQueue[LQ.front];
+        LQ.front++;
         return temp;
+    }
+}
+
+void isFull()
+{
+    if(LQ.rear==LQ.SIZE-1)
+    {
+        printf("Queue is full\n");
+    }
+    else
+    {
+        printf("Queue is not full\n");
     }
 }
 
 void isEmpty()
 {
-    if(front==rear==-1)
+    if(LQ.rear==LQ.front==-1||LQ.front>LQ.rear)
     {
-        printf("Queue is empty \n");
+        printf("Queue is Empty\n");
     }
-    printf("\n");
-}
-
-void isFull()
-{
-    if(rear==SIZE-1)
+    else
     {
-        printf("Queue is full \n");
+        printf("Queue is not Empty\n");
     }
-    printf("\n");
 }
 
 void Traverse()
 {
-    printf("Elements present in the linear Queue are: ");
-    for(int i = front;i<=rear;i++)
+    if(LQ.rear==LQ.front==-1||LQ.front>LQ.rear)
     {
-        printf("%d ",LQueue[i]);
+        printf("Queue is Empty\n");
     }
-    printf("\n");
+    else
+    {
+        for (int i = LQ.front; i <=LQ.rear; i++)
+        {
+            printf("%d ",LQ.LQueue[i]);
+        }
+        printf("\n");
+    }
 }
-
-
-
-
