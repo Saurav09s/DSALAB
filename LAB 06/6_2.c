@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 
 int size,count=0;
 
@@ -8,16 +7,15 @@ struct Stack
 {
     int val;
     struct Stack *next;
-};
+}*Top=NULL;
 
-void PUSH(struct Stack *Top);
-int POP(struct Stack *Top);
-void Display(struct Stack *Top);
+void PUSH(int x);
+int POP();
+void isEmpty();
+void Display();
 
 int main()
 {
-    struct Stack *Top;
-
     printf("Enter the size of the stack: ");
     scanf("%d",&size);
 
@@ -26,26 +24,34 @@ int main()
         printf("MENU:\n");
         printf("1.PUSH\n");
         printf("2.POP\n");
-        printf("3.Display\n");
-        printf("4.EXIT\n");
+        printf("3.isEmpty\n");
+        printf("4.Display\n");
+        printf("5.EXIT\n");
         int choice;
         printf("Enter your choice: ");
         scanf("%d", &choice);
         switch (choice)
         {
             case 1:
-                PUSH(Top);
+                printf("Enter the element to be pushed:- ");
+                int x;
+                scanf("%d",&x);
+                PUSH(x);
                 break;
             
             case 2:
-                printf("The deleted item is: %d",POP(Top));
+                printf("%d deleted from the stack\n",POP());
                 break;
 
             case 3:
-                Display(Top);
+                isEmpty();
+                break;
+                
+            case 4:
+                Display();
                 break;
 
-            case 4:
+            case 5:
                 exit(0);
                 break;
 
@@ -55,7 +61,7 @@ int main()
         }
     }
 }
-void PUSH(struct Stack *Top)
+void PUSH(int x)
 {
     if(count==size)
     {
@@ -71,34 +77,45 @@ void PUSH(struct Stack *Top)
     }
     else
     {
-        printf("Enter the element to be pushed:");
-        scanf("%d",&new->val);
-        new->next=Top->next;
-        Top->next = new;
-        printf("Element successfull pushed\n");
+        new->val=x;
+        new->next=Top;
+        Top = new;
+        printf("Element successfully pushed\n");
         count++;
     }
 }
 
-int POP(struct Stack *Top)
+int POP()
 {
-    int x;
+    int x=-1;
     struct Stack *Temp;
-    Temp = Top;
     if(Top==NULL)
     {
         printf("\nEmpty\n");
     }
-    else if(Top->next!=NULL)
+    else
     {
-        x = Top->val;
-        Top = Temp->next;
+        Temp = Top;
+        Top = Top->next;
+        x = Temp->val;
         free(Temp);
-        return x;
+    }
+    return x;
+}
+
+void isEmpty()
+{
+    if(Top==NULL)
+    {
+        printf("Stack is empty\n");
+    }
+    else
+    {
+        printf("Stack is not empty");
     }
 }
 
-void Display(struct Stack *Top)
+void Display()
 {
     struct Stack *temp;
     temp = Top;
@@ -107,4 +124,6 @@ void Display(struct Stack *Top)
         printf("%d ",temp->val);
         temp = temp->next;
     }
+    printf("\n");
 }
+
