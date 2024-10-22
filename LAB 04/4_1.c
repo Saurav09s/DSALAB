@@ -160,50 +160,30 @@ void count(struct sll *node)
 
 int deleteFrom(struct sll *node)
 {
+    struct sll *temp;
     printf("Enter the position of the element: ");
     int pos,t,c=0;
     scanf("%d",&pos);
     if(pos==1)
     {
         node = start;
-        struct sll *temp;
-        temp = (struct sll*)malloc(sizeof(struct sll));
         t = node->val;
         temp = node;
         node = node->NEXT;
         start = node;
         free(temp);       
     }
-    else if(pos==count1)
-    {
-        node = start;
-        struct sll *temp, *prev;
-        while(node->NEXT!=NULL)
-        {
-            prev=node;
-            node = node->NEXT;
-        }
-        t=node->val;
-        temp = node;
-        node = prev;
-        node->NEXT=NULL;
-        node = start;
-        free(temp);
-    }
     else
     {
-        node = start;
-        struct sll *temp,*prev;
-        while(c!=pos-1)
-        {
-            prev = node;
+       for (int  i = 0; i < pos-1; i++)
+       {
+            temp  = node;
             node = node->NEXT;
-            c++;
-        } 
-        temp = node;
-        node = prev;
-        node->NEXT=temp->NEXT;
-        free(temp);      
+       }
+       temp->NEXT = node->NEXT;
+       temp = node;
+       node = node->NEXT;
+       free(temp);       
     }
     return t;
 }
