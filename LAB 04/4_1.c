@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int count1=0;
-
 struct sll 
 {
     int val;
@@ -29,7 +27,6 @@ int main()
     printf("Enter a value to be inserted: ");
     scanf("%d",&node->val);
     node->NEXT=NULL;
-    count1 = 1;
     n--;
     while(n!=0)
     {
@@ -40,7 +37,6 @@ int main()
         node->NEXT=new;
         node = new;
         node->NEXT=NULL;
-        count1++;
         n--;
     } 
     node = start; 
@@ -94,56 +90,43 @@ void inAtAny(struct sll *node)
     scanf("%d",&x);
     printf("Enter the position: ");
     scanf("%d",&pos);
-    if(pos==1)
+    if(pos==0)
     {
         struct sll *new;
         new = (struct sll*)malloc(sizeof(struct sll*));
-        new->NEXT=start;
         new->val= x;
+        new->NEXT=start;
         start = new;
         node = start;
-        count1++;
     } 
-    else if(pos == count1+1)
+    else
     {
-        while(node->NEXT!=NULL)
+        struct sll *p;
+        node = start;
+        p = node;
+        for(int i = 0;i<pos-1;i++)
         {
+            p = node;
             node = node->NEXT;
         }
         struct sll *new;
         new = (struct sll*)malloc(sizeof(struct sll*));
         new->val= x;
-        node->NEXT = new;
-        node = new;
-        node->NEXT = NULL;
-        count1++;
+        p->NEXT= new;
+        new->NEXT = node;
     }
-    else
-    {
-        c=0;
-        while(c<pos-2)
-        {
-            node=node->NEXT;
-            c++;
-        }
-        struct sll *new;
-        new = (struct sll *)malloc(sizeof(struct sll *));
-        new->val = x;
-        new->NEXT = node->NEXT;
-        node->NEXT = new;
-        node=new;
-        count1++;
-    }  
 }
 
 
 void traverse(struct sll *node)
 {
-    if(node!=NULL)
+    struct sll *p = start;
+    while(p)
     {
-        printf("%d ",node->val);
-        traverse(node->NEXT);
+        printf("%d ",p->val);
+        p = p->NEXT;
     }
+    printf("\n");
 }
 
 void count(struct sll *node)
