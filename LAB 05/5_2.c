@@ -1,82 +1,182 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <malloc.h>
 
-struct cll
+struct Node
 {
-    int val;
-    struct cll *next;
-}*start,*node;
+    int data;
+    struct Node *next;
+}*Head=NULL;
 
-void create(struct cll *node);
-void traverse(struct cll *node);
+void create(int A[], int n)
+{
+    int i;
+    struct Node *t, *last;
+    Head = (struct Node *)malloc(sizeof(struct Node));
+    Head->data = A[0];
+    Head->next = Head;
+    last = Head;
+    for (i = 1; i < n; i++)
+    {
+        t = (struct Node *)malloc(sizeof(struct Node));
+        t->data = A[i];
+        t->next = last->next;
+        last->next = t;
+        last = t;
+    }
+}
+void display(struct Node *h)
+{
+    do
+    {
+        printf("%d ",h->data);
+        h = h->next;
+    } while (h!=Head);
+    printf("\n");
+}
+
+int length(struct Node *p)
+{
+    int len = 0;
+    do
+    {
+        len++;
+        p = p->next;
+    } while (p!=Head);
+    return len;
+}
+
+void insert(struct Node *p, int index, int x)
+{
+    struct Node *t;
+    int i;
+    if(index < 0 || index > length(p))
+        return;
+
+    if(index==0)
+    {
+        t = (struct Node*)malloc(sizeof(struct Node));
+        t->data = x;
+        if(Head==NULL)
+        {
+            Head = t;
+            Head->next = Head;
+        }
+        else
+        {
+            while (p->next != Head)p = p->next;
+            p->next = t;
+            t->next = Head;
+            Head = t;            
+        }
+    }
+    else
+    {
+        for (int i = 0; i < index-1; i++)p = p->next;
+
+        t = (struct Node*)malloc(sizeof(struct Node));
+        t->data = x;
+        t->next = p->next;
+        p->next = t;     
+    }
+}
+int delete(struct Node *p, int index)
+{
+    struct Node *q;
+    int i,x = -1;
+    if(index < 0 || index > length(Head))
+        return x;
+
+    if(index==1)
+    {
+        while(p->next!=Head)p = p->next;
+        x = Head->data;
+        if(Head==p)
+        {
+            free(Head);
+            Head=NULL;
+        }
+        else
+        {
+            p->next = Head->next;
+            free(Head);
+            Head = p->next;
+        }
+    }
+    else
+    {
+        for (i = 0; i < index-2; i++)
+        {
+            p=p->next;
+        }
+        q = p->next;
+        p->next = q->next;
+        x=q->data;
+        free(q);
+    }
+    return x;
+}
 
 int main()
 {
-    struct cll *node, *start;
-    node = (struct cll*)malloc(sizeof(struct cll*));
-    if(node == NULL)
+    printf("Enter the no of nodes: ");
+    int n;
+    scanf("%d",&n);
+    printf("Enter the elements of the circular linked list: ");
+    int a[n];
+    for(int i = 0;i<n;i++)
     {
-        printf("Memory was not allocated");
-        exit(0);
+        scanf("%d",&a[i]);
     }
-    start  = node;
-    while(1)
+    create(a,n);
+    printf("Linked List created\n");
+
+    printf("Main Menu\n");
+    printf("1.Insert\n");
+    printf("2.Delete\n");
+    printf("3.Count no of Nodes\n");
+    printf("4.Display\n");
+    printf("5.EXIT\n");
+
+    while (1)
     {
-        int choice;
-        printf("Enter your choice: ");
-        scanf("%d",&choice);
-        switch (choice)
+        int option;
+        printf("Enter option: ");
+        scanf("%d",&option);
+        switch (option)
         {
             case 1:
-                create(node);
+                printf("Enter the element to be inserted: ");
+                int x;
+                scanf("%d",&x);
+                printf("Enter the position: ");
+                int pos;
+                scanf("%d",&pos);
+                insert(Head,pos,x);
                 break;
 
             case 2:
-                traverse(node);
+                printf("Enter which node has to be deleted: ");
+                int index;
+                scanf("%d",&index);
+                delete(Head,index);
                 break;
 
             case 3:
-                exit(0);
+                printf("The no of nodes in circular linked list is: ",length(Head));
                 break;
 
+            case 4:
+                printf("Circular Linked List:  ");
+                display(Head);
+                break;
+
+            case 5:
+                exit(0);        
+            
             default:
-                printf("Wrong choice!");
+                printf("Wrong Choice!");
                 break;
         }
-    }
-}
-
-void create(struct cll *node)
-{
-    printf("Enter a value to be inserted: ");
-    scanf("%d",&node->val);
-    node->next=NULL;
-    printf("Would you like to continue? (Y/N):");
-    char ch[2];
-    scanf("%s",ch);
-    while(ch[0]=='Y')
-    {
-        struct cll *new;
-        new = (struct cll*)malloc(sizeof(struct cll*));
-        new->next=NULL;
-        printf("Enter the value to be inserted in the list: ");
-        scanf("%d",&new->val);
-        node->next=new;
-        node = new;
-        node->next=NULL;
-        printf("Would you like to continue? (Y/N):");
-        scanf("%s",ch);
-    }
-    node->next=start;
-    node = start; 
-}
-
-void traverse(struct cll *node)
-{
-    while(node!=NULL)
-    {
-        printf("%d ",node->val);
-        node = node->next;
-    }
-    printf("\n");
+    }    
 }

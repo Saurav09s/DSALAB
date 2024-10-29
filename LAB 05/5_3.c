@@ -66,7 +66,8 @@ void freeList(Header* header) {
     free(header);
 }
 
-int main() {
+int main() 
+{
     Header* header = createHeader();
     int rows, cols;
 

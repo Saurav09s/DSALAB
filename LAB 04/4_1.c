@@ -158,11 +158,11 @@ int deleteFrom(struct sll *node)
     }
     else
     {
-       for (int  i = 0; i < pos-1; i++)
-       {
-            temp  = node;
+        for (int i = 0; i < pos - 1; i++)
+        {
+            temp = node;
             node = node->NEXT;
-       }
+        }
        temp->NEXT = node->NEXT;
        temp = node;
        node = node->NEXT;
