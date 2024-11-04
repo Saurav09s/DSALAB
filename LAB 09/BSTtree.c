@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct BstNode{
+typedef struct BstNode{
     struct BstNode *lchild;
     struct BstNode *rchild;
     int data;
-}*root = NULL;
-
+}BST;
+BST *root = NULL;
 void Insert(int key)
 {
     struct BstNode* t = root;
